@@ -1,0 +1,360 @@
+##########################################
+##        Basic Arithmetics With R      ##
+##########################################
+
+2+5*7
+
+5/3+2
+
+5/(3+2)
+
+5/3^2
+
+(5/3)^2
+
+5^18
+
+5/0    ### Inf: Infinite
+
+0/0  ##NaN: Not a Number
+
+#########################################
+##            Assignments              ##
+#########################################
+
+# Assignment Operator '<-'
+x <- 7
+
+# display a value:
+print(x)
+x
+
+#########################################
+##        Data Types / Attributes      ##
+#########################################
+
+# numeric
+x <- 7
+length(x)
+mode(x)
+is.integer(x)
+is.double(x)
+
+# logical variables
+y <- is.numeric(x)
+y
+
+# character
+z <- "A"
+z
+z <- 'test'
+z
+
+#########################################
+##          Working Space              ##
+#########################################
+
+name <- "Knut"; n1 <- 10; n2 <- 100; m <- 0.5
+
+ls()
+ls.str()
+
+save(x, name, m, file="somedata.RData")
+rm(name, n1)
+ls()
+load("somedata.RData")
+ls()
+
+## working directory
+getwd()
+setwd("C:/Users/unkel/Desktop/Geophysik/uebung") # you should use a different working directory
+#########################################
+##             Vectors                 ##
+#########################################
+
+# Combination of Elements
+x <- c(5, 2, 8, 99)
+x
+x <- c(x, 3, 4)
+x
+y <- c("A", "B")
+y
+z <- c(TRUE,FALSE,TRUE)
+
+xz<-c(x,z)    # implicit Type Conversion
+xz
+
+as.numeric(z) # explicit Type Conversion
+
+# Determination of Type and Length
+mode(z)
+mode(x)
+
+is.numeric(x)
+is.logical(x)
+is.character(y)
+
+length(z)
+
+# Sequences
+seq(from=0, to=10, by=2)
+seq(from=0, to=10, length=5)
+seq(to=10)
+1:10
+
+# Repetitions
+rep(0, times=5)
+rep(1:3, times=5)
+rep(1:3, length=5)
+rep(1:3, each=5)
+
+# Access to Elements
+x <- 2:7
+x
+x[2]
+x[-3]
+x[2:4]
+x[x > 3]
+x[c(1, 3:5)]
+x[2:4] <- 10
+x
+
+# Calculating with Vectors
+x <- 1:3
+y <- 3:1
+x+1
+x+y
+sum(x)
+cumsum(x)
+prod(y)
+cumprod(y)
+x*y
+exp(x)
+x^2
+
+
+
+# Missing Values (Not Available)
+x <- c(7, NA, 3, 5)
+max(x)
+max(x, na.rm=TRUE)
+
+#########################################
+##             Matrices                ##
+#########################################
+
+# Building of Matrices
+m <- matrix(1:12, ncol=4, nrow=3)
+m
+m <- matrix(m, ncol=4, nrow=3, byrow=T)
+m
+
+# Access to Elements
+m[1,2]
+m[,1]
+m[2,]
+m[2:3, -4]
+
+# Type and Dimension
+mode(m)
+length(m)
+dim(m)
+attributes(m)
+rownames(m) <- c("aber", "oder", "und")
+attributes(m)
+m
+
+# Combination of Vectors and Matrices
+x <- 1:3
+y <- 3:1
+m <- cbind(x, y)
+m
+m <- rbind(x, y)
+m
+
+# Transpose & Matrixmultiplication
+t(m)
+m2 <- m %*% t(m)
+m2
+x <- rep(1, 2)
+m2 %*% x
+x %*% m2
+
+##########################################
+##              Lists                   ##
+##########################################
+
+# Building of Lists
+div <- list(vector=1:5, char="ABC", mat=matrix(1:4, ncol=2, nrow=2))
+div
+str(div)
+attributes(div)
+
+# Access to Elements
+div$char
+div[[2]]
+
+div[[1]][-1]
+
+##########################################
+##      Reading in data     ##
+##########################################
+daten <-read.table("data1.txt", col.names=c("Weight","MPG"))
+
+names(daten)
+str(daten)
+dim(daten)
+daten[1:2,]
+daten$Weight[1:10]
+
+
+##########################################
+##       Functions & Packages           ##
+##########################################
+
+# install.packages("survival")
+library("splines")
+search()
+sessionInfo()
+detach(package:splines)
+search()
+
+attach(daten)
+
+##########################################
+##           Helpfunctions              ##
+##########################################
+
+help(Syntax)
+?"+"
+help("bs", try.all.packages=TRUE)
+help("bs", package = "splines")
+help.start()
+
+#########################################
+##           Programming               ##
+#########################################
+
+# Functions
+square <- function(x) {
+  return(x*x)
+}
+
+square(3)
+
+pow <- function(x, power) {
+  return(x^power)
+}
+
+pow(2, 2)
+pow(power=3, x=2)
+
+# for-loops
+forfun1 <- function(x=rep(0, 10)) {
+  for(i in seq(along=x)) {
+    x[i] <- x[i] + i
+  }
+  return(x)
+}
+
+forfun1()
+forfun1(5:3)
+
+forfun2 <- function(x=rep(0, 10)) {
+  for(i in seq(2, 10, 2)) {
+    x[i] <- x[i] + i
+  }
+  invisible(x)
+}
+
+forfun2()
+nx <- forfun2()
+nx
+
+# while-loops
+x <- 1
+while( x < 10 ) {
+  x <- 2*x
+  print(x)
+}
+
+# if-query
+mybernoulli <- function(prob=0.5) {
+ 
+  u <- runif(1)
+    if (u < prob)
+      return(1)
+    else
+      return(0)
+}
+mybernoulli()     ##equates to rbinom(1, 1, 0.5)
+
+########################################
+##   Regression and formula objects  ##
+########################################
+
+x <- runif(100, 0, 5)
+y <- 0.5*x + rnorm(100, sd=0.5)
+
+formel <- y ~ x
+formel
+
+lm1 <- lm(formel)
+lm1
+is.list(lm1)
+str(lm1)
+attributes(lm1)
+lm1$coefficients
+coef(lm1)
+summary(lm1)
+
+
+yhat <- lm1$fitted.values
+yhat.test <- lm1$coef[1] + lm1$coef[2]*x
+
+identical(yhat, yhat.test)
+range(yhat - yhat.test)
+
+#########################################
+##             Graphics                ##
+#########################################
+
+# Generation of Graphics
+v <- runif(100, 0, 2*pi)
+w <- sin(v)
+plot(v, w)
+windows()
+plot(v, w, type="l")
+
+o <- order(v)
+v <- v[o]
+w <- w[o]
+plot(v, w, type="l")
+plot(v, w, type="s")
+
+# Extensions of Graphics
+points(v, cos(v), pch=19)
+lines(v, cos(v), col="red", lwd=2)
+
+# several Graphics in one Image
+if (.Platform$OS.type == "unix") x11() else windows()
+par(mfrow=c(2, 2))
+plot(v, w, type="l")
+plot(v, w, type="s")
+plot(v, cos(v), type="l")
+plot(v, cos(v), type="s")
+graphics.off()
+
+# Example for a Regression
+plot(x, y, ylim=range(y, yhat), ylab="", main="Regression Example")
+par(new=TRUE)
+plot(x, yhat, type="o", col="blue", ylim=range(y, yhat), ylab="")
+legend(4, 0, c("y", expression(hat(y))), col=c("black", "blue"), pch=c(19,19))
+
+plot(lm1)
+?plot.lm
+
+# Storage in PDF-Format
+pdf(file="sinus.pdf", width=5, height=5, paper="special", pointsize=12)
+plot(v, w, type="l")
+dev.off()
